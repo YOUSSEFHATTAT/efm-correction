@@ -1,43 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  
-    <title>Document</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion</title>
 </head>
 <body>
-    <form method="post">
-        <label >email</label>
-        <input type="email" name="email">
-        <label >password</label>
-        <input type="password" name="password">
-        <input type="submit" value="connexion" name="connexion">
-
-    </form>
-    <?php
-    try{
-        $pdo= new PDO('mysql:host=localhost,dbname=immobilier','root','');
-    }
-    catch(exeption $e){
-        echo 'erreur'.' ' echo$e->getmessage();
-    }
-    if(!empty($_POST['email'])&& !empty($_POST['password'])){
-    $email=htmlspecialchars($_POST['email']);
-    $password=htmlspecialchars($_POST['password']);
-    $sqlstate=$pdo->prepare('SELECT *  FROM client WHERE email=? AND password= ?');
-    $sqlstate->execute([$email,$password]);
-    if($sqlstate->rowCount()>=1){
-        session_start();
-        $_SESSION['user']=$sqlstate->fetch(PDO::FETCH_ASSOC);
-        header('location:locationEncours.php')
-
-    }else{
-        echo'login ou mot de passe incorrecte.'
-    }
-    }
-    else{
-        echo'tous les champs sont obligatoires';
-    }
+    <?php 
+        if(isset($_POST['connexion'])){
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            if(!empty($email) && !empty($password)){
+                $pdo = new PDO('mysql:host=localhost;dbname=immobilier','root','');
+                $sqlState = $pdo->prepare('SELECT * FROM client WHERE email=? AND password=?');
+                $sqlState->execute([$email,$password]);
+                if($sqlState->rowCount()>=1){
+                    // connecter
+                    session_start();
+                    $_SESSION['user'] = $sqlState->fetch(PDO::FETCH_ASSOC);
+                    header('location: locationsencours.php');
+                }else{
+                    echo "login ou mot de passe incorrecte";
+                }
+            }else{
+                echo 'champs obligatoire';
+            }
+        }
     ?>
-    
+    <form method="post">
+        <label for="">Email</label>
+        <input type="email" name="email">
+        <label for="">password</label>
+        <input type="password" name="password">
+        <input type="submit" value="Connexion" name="connexion">
+    </form>
 </body>
 </html>
