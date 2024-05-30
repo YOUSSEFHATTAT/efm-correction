@@ -1,12 +1,6 @@
-<?php
-try{
-    $pdo= new PDO('mysql:host=localhost,dbname=immobilier','root','');
-}
-catch(exeption $e){
-    echo 'erreur'.' ' echo $e->getmessage();
-}
-$id = $_GET['id'];
-    $sqlstate=$pdo->prepare('DELETE  FROM client WHERE id_client=?');
-    $sqlstate->execute([$id]);
-header('location:listerC.php')
-?>
+<?php 
+    $id = $_GET['id'];
+    $pdo = new PDO('mysql:host=localhost;dbname=immobilier','root','');
+    $sqlState = $pdo->prepare('DELETE FROM client WHERE id_client=?');
+    $sqlState->execute([$id]);
+    header('location: listerc.php');
